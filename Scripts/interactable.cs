@@ -7,6 +7,8 @@ public class interactable : MonoBehaviour
     public GameObject popup;
     public bool opened = false;
     public Collider2D newCollider;
+    public string aquiredItem;
+
     void Start(){
         popup.GetComponent<Renderer>().enabled = false;
     }
@@ -17,7 +19,7 @@ public class interactable : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if(Input.GetKeyDown(KeyCode.Return) && !opened){
-            Debug.Log("Interactable Test - Open");
+            Debug.Log("Got " + aquiredItem+"!");
             Pause();
             opened = true;
         }
@@ -26,8 +28,12 @@ public class interactable : MonoBehaviour
             Resume();
         }
         else if(Input.GetKeyDown(KeyCode.Return) && opened){
-            Debug.Log("Interactable Test - Cannot open! Empty");
+            Debug.Log("Empty");
             Pause();
+            if(Input.GetKeyDown(KeyCode.Return)){
+                Debug.Log("Interactable Test - Close");
+                Resume();
+            }
         }
         
     
