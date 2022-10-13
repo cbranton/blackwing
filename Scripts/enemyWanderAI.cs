@@ -22,6 +22,11 @@ public class enemyWanderAI : MonoBehaviour
         if(OnTriggerEnter2D(aggroRange)){
             transform.position += ((target.position-transform.position)*aggroSpeed*Time.deltaTime);
         }
+        if(OnTriggerExit2D(aggroRange)){
+            PositionChange();
+            transform.position=Vector2.Lerp(transform.position,newPosition,Time.deltaTime*speed);
+            LookAt2D(newPosition);
+        }
         else{
             PositionChange();
             transform.position=Vector2.Lerp(transform.position,newPosition,Time.deltaTime*speed);
@@ -34,8 +39,12 @@ public class enemyWanderAI : MonoBehaviour
         newPosition = new Vector2(Random.Range(-5.0f, 5.0f), Random.Range(-5.0f, 5.0f));
     }
 
-    private bool OnTriggerEnter2D(Collider2D aggroTrig){
+    private bool OnTriggerEnter2D(Collider2D aggroExit){
         return true;
+    }
+
+    private bool OnTriggerExit2D(Collider2D aggroExit){
+        return false;
     }
 
     void LookAt2D(Vector2 lookAtPosition)
