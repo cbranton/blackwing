@@ -23,6 +23,11 @@ public class interactable : MonoBehaviour
                 Debug.Log("Empty");
                 Pause();
             }
+
+            else if(Input.GetKeyDown(KeyCode.Return)){
+                Debug.Log("Interactable Test - Close");
+                Resume();
+            }
             
             if(Input.GetKeyDown(KeyCode.Return) && !opened){
                 Debug.Log("Got " + aquiredItem+"!");
