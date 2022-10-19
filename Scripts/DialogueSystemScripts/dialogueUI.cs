@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -8,15 +9,20 @@ public class dialogueUI : MonoBehaviour
     [SerializeField] private dialogueObject testDialogue;
     [SerializeField] private GameObject dialogueBox;
 
+    public bool isOpen { get; private set; }
+
+    private responseHandler ResponseHandler;
     private typewriterEffect TypewriterEffect;
 
     private void Start(){
         TypewriterEffect = GetComponent<typewriterEffect>();
+        ResponseHandler = GetComponent<responseHandler>();
+
         CloseDialogueBox();
-        ShowDialogue(testDialogue);
     }
 
     public void ShowDialogue(dialogueObject DialogueObject){
+        isOpen = true;
         dialogueBox.SetActive(true);
         StartCoroutine(StepThroughDialogue(DialogueObject));
     }
@@ -24,15 +30,23 @@ public class dialogueUI : MonoBehaviour
     private IEnumerator StepThroughDialogue(dialogueObject DialogueObject){
         yield return new WaitForSeconds(1);
 
-        foreach (string dialogue in DialogueObject.Dialogue){
+        for(int i = 0; i < DialogueObject.Dialogue.Length; i++){
+            string dialogue = DialogueObject.Dialogue[i];
             yield return TypewriterEffect.Run(dialogue, textLabel);
+
+            if (i == DialogueObject.Dialogue.Length - 1 && DialogueObject.HasResponses) break;
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
         }
-
-        CloseDialogueBox();
+        if(DialogueObject.HasResponses){
+            ResponseHandler.ShowResponses(DialogueObject.Responses);
+        }
+        else{
+            CloseDialogueBox();
+        }
     }
 
     private void CloseDialogueBox(){
+        isOpen = false;
         dialogueBox.SetActive(false);
         textLabel.text = string.Empty;
     }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b34df5b61129924db825643a5e9d5ea, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  dialogue:
+  - 'This is a dialogue test.
+
+    How is this?
+
+    I hope it works.'
+  - 'Well, it does appear to be doing something, so that''s good.
+
+    Right?'
+  responses:
+  - responseText: Yes
+    DialogueObject: {fileID: 11400000, guid: af939c4d129bf884ca3b03a5c039dc94, type: 2}
+  - responseText: No
+    DialogueObject: {fileID: 11400000, guid: 15bfa170789cd8642b4e8ae285d7a361, type: 2}

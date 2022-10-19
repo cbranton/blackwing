@@ -4,35 +4,28 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    Rigidbody2D body;
+    [SerializeField] private dialogueUI dialogueUI;
 
-    float horizontal;
-    float vertical;
-    float moveLimiter = 0.7f;
+    private const float MoveSpeed = 10f;
 
-    public float runSpeed = 20.0f;
+    public dialogueUI DialogueUI => dialogueUI;
 
-    void Start ()
-    {
-        body = GetComponent<Rigidbody2D>();
+    public interactable interactable { get; set; }
+
+    private Rigidbody2D rb;
+
+    private void Start(){
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
-    {
-   // Gives a value between -1 and 1
-        horizontal = Input.GetAxisRaw("Horizontal"); // -1 is left
-        vertical = Input.GetAxisRaw("Vertical"); // -1 is down
-    }
-
-    void FixedUpdate()
-    {
-        if (horizontal != 0 && vertical != 0) // Check for diagonal movement
-    {
-      // limit movement speed diagonally, so you move at 70% speed
-        horizontal *= moveLimiter;
-        vertical *= moveLimiter;
-    } 
-
-    body.velocity = new Vector2(horizontal * runSpeed, vertical * runSpeed);
+    private void Update(){
+        if(dialogueUI.isOpen) return;
+        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        rb.MovePosition(rb.position + input.normalized* (MoveSpeed * Time.fixedDeltaTime));
+        if (Input.GetKeyDown(KeyCode.Return)){
+            if(interactable != null){
+                interactable.Interact(this);
+            }
+        }
     }
 }
