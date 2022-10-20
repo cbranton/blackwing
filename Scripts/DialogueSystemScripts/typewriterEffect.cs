@@ -7,16 +7,28 @@ public class typewriterEffect : MonoBehaviour
 {
     [SerializeField] private float typewriterSpeed;
 
-    private readonly Dictionary<HashSet<char>,float> punctuations = new Dictionary<HashSet<char>,float>(){
-        {new HashSet<char>(){'.','!','?'}, 0.6f},
-        {new HashSet<char>(){',',';',':'}, 0.3f},
+    public bool IsRunning {get; private set;}
+
+    private readonly List<Punctuation> punctuations = new List<Punctuation>(){
+        new Punctuation(new HashSet<char>(){'.','!','?'}, 0.6f),
+        new Punctuation(new HashSet<char>(){',',';',':'}, 0.3f),
     };
 
-    public Coroutine Run(string textToType, TMP_Text textLabel){
-        return StartCoroutine(TypeText(textToType, textLabel));
+    private Coroutine typingCoroutine;
+
+
+    public void Run(string textToType, TMP_Text textLabel){
+        typingCoroutine = StartCoroutine(TypeText(textToType, textLabel));
+    }
+
+    public void Stop(){
+        StopCoroutine(typingCoroutine);
+        IsRunning = false;
+
     }
 
     private IEnumerator TypeText(string textToType, TMP_Text textLabel){
+        IsRunning = true;
 
         float t = 0;
         int charIndex = 0;
@@ -40,19 +52,28 @@ public class typewriterEffect : MonoBehaviour
 
             yield return null;
         }
-
-        textLabel.text = textToType;
+        IsRunning = false;
     }
 
     private bool IsPunctuation(char character, out float waitTime){
-        foreach(KeyValuePair<HashSet<char>, float> punctuationCategory in punctuations){
-            if (punctuationCategory.Key.Contains(character)){
-                waitTime = punctuationCategory.Value;
+        foreach(Punctuation punctuationCategory in punctuations){
+            if (punctuationCategory.Punctuations.Contains(character)){
+                waitTime = punctuationCategory.WaitTime;
                 return true;
             }
         }
 
         waitTime = default;
         return false;
+    }
+
+    private readonly struct Punctuation{
+        public readonly HashSet<char> Punctuations;
+        public readonly float WaitTime;
+
+        public Punctuation(HashSet<char> punctuations, float waitTime){
+            Punctuations = punctuations;
+            WaitTime = waitTime;
+        }
     }
 }

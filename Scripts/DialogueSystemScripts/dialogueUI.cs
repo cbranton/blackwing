@@ -27,14 +27,21 @@ public class dialogueUI : MonoBehaviour
         StartCoroutine(StepThroughDialogue(DialogueObject));
     }
 
+    public void AddResponseEvents(ResponseEvent[] responseEvents){
+        //responseHandler.AddResponseEvents(responseEvents);
+    }
+
     private IEnumerator StepThroughDialogue(dialogueObject DialogueObject){
         yield return new WaitForSeconds(1);
 
         for(int i = 0; i < DialogueObject.Dialogue.Length; i++){
             string dialogue = DialogueObject.Dialogue[i];
-            yield return TypewriterEffect.Run(dialogue, textLabel);
+            yield return RunTypingEffect(dialogue);
+
+            textLabel.text = dialogue;
 
             if (i == DialogueObject.Dialogue.Length - 1 && DialogueObject.HasResponses) break;
+            yield return null;
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
         }
         if(DialogueObject.HasResponses){
@@ -42,6 +49,17 @@ public class dialogueUI : MonoBehaviour
         }
         else{
             CloseDialogueBox();
+        }
+    }
+
+    private IEnumerator RunTypingEffect(string dialogue){
+        TypewriterEffect.Run(dialogue, textLabel);
+        while(TypewriterEffect.IsRunning){
+            yield return null;
+
+            if(Input.GetKeyDown(KeyCode.RightShift)||Input.GetKeyDown(KeyCode.LeftShift)){
+                TypewriterEffect.Stop();
+            }
         }
     }
 
