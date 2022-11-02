@@ -6,6 +6,8 @@ public class DialogueResponseEvents : MonoBehaviour
     [SerializeField] private dialogueObject DialogueObject;
     [SerializeField] private ResponseEvent[] events;
 
+    public dialogueObject dialogueObject => DialogueObject;
+
     public ResponseEvent[] Events => events;
 
     public void OnValidate(){
@@ -25,6 +27,7 @@ public class DialogueResponseEvents : MonoBehaviour
 
             if(events[i]!= null){
                 events[i].name = Response.ResponseText;
+                continue;
             }
             events[i] = new ResponseEvent(){name = Response.ResponseText};
         }

@@ -28,7 +28,7 @@ public class dialogueUI : MonoBehaviour
     }
 
     public void AddResponseEvents(ResponseEvent[] responseEvents){
-        //responseHandler.AddResponseEvents(responseEvents);
+        ResponseHandler.AddResponseEvents(responseEvents);
     }
 
     private IEnumerator StepThroughDialogue(dialogueObject DialogueObject){
@@ -63,7 +63,7 @@ public class dialogueUI : MonoBehaviour
         }
     }
 
-    private void CloseDialogueBox(){
+    public void CloseDialogueBox(){
         isOpen = false;
         dialogueBox.SetActive(false);
         textLabel.text = string.Empty;
